@@ -1,6 +1,5 @@
 import axios from 'axios';
-import {photoApi, gMapsApi} from '../apiKeys';
-
+import {photoApi} from '../apiKeys';
 
 const initialState = {
   photoUrl: '',
@@ -14,40 +13,30 @@ const initialState = {
 const PHOTOSTATUS = 'PHOTOSTATUS';
 
 export default function reducer(state = initialState, action) {
+  console.log(action.type)
 
   switch (action.type) {
     case PHOTOSTATUS + '_PENDING':
-      return
-        this.setState({
-          loading: true
-        });
+      console.log("Pending Promise")
+      return {loading: true}
 
     case PHOTOSTATUS + '_FULFILLED':
-      return
-        this.setState({
-          photoUrl : action.payload.urls.small,
-          photoCreditName : action.payload.user.name,
-          photoCreditUrl : action.payload.links.html,
-          photoLocation : action.payload.user.location,
-          loading : false
-        });
+      return {photoUrl: action.payload.urls.small,
+        photoCreditName: action.payload.user.name,
+        photoCreditUrl: action.payload.user.links.html,
+        photoLocation: action.payload.user.location,
+        loading: false}
 
     case PHOTOSTATUS + '_REJECTED':
-      return
-        this.setState({
-          failed : true
-      });
+      return {failed: true}
 
     default:
       return state;
   }
 }
 
-export function getPhoto(){
+export function getPhoto() {
   const url = `https://api.unsplash.com/photos/random/?client_id=${photoApi}`
-  const promise = axios.get( url ).then( response => response.data );
-  return {
-    type: PHOTOSTATUS,
-    payload: promise
-  }
+  const promise = axios.get(url).then(response => response.data);
+  return {type: PHOTOSTATUS, payload: promise}
 }
